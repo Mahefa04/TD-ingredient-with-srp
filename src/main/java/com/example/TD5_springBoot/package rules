@@ -1,0 +1,112 @@
+🧱 📁 1. Rôle de chaque dossier
+
+🔹 📦 entity/
+
+👉 Représente les données (comme en base)
+
+Exemple :
+
+Ingredient, Dish, StockMovement
+
+✔ contient :    attributs
+                getters/setters
+
+
+
+❌ ne contient PAS :
+
+SQL
+logique métier
+API
+
+👉 💡 pense : "objet = table"
+
+🔹 📦 entity/enums/
+
+👉 Valeurs fixes
+
+Exemple :
+
+Unit, CategoryEnum, DishTypeEnum
+
+✔ évite les erreurs
+✔ correspond à PostgreSQL ENUM
+
+🔹 📦 repository/
+
+👉 Accès base de données (SQL)
+
+Exemple :
+
+findAll()
+findById()
+save()
+
+✔ contient :
+
+requêtes SQL
+ResultSet
+
+❌ ne contient PAS :
+
+logique métier
+API
+
+👉 💡 pense : "je parle à la DB ici"
+
+🔹 📦 service/
+
+👉 Logique métier
+
+Exemple :
+
+calcul du stock
+transformation DTO
+règles métier
+
+✔ contient :
+
+IN → +
+OUT → -
+
+👉 💡 pense : "intelligence de l’app"
+
+🔹 📦 controller/
+
+👉 API (HTTP)
+
+Exemple :
+
+GET /ingredients
+
+✔ reçoit requête
+✔ appelle service
+✔ retourne réponse
+
+❌ pas de SQL ici
+
+👉 💡 pense : "porte d’entrée de l’app"
+
+🔹 📦 dto/
+
+👉 Données envoyées au client
+
+Exemple :
+
+IngredientDTO
+StockResponseDTO
+
+✔ version simplifiée
+✔ évite d’exposer les entities
+
+👉 💡 pense : "ce que voit le client"
+
+🔹 📦 config/
+
+👉 Configuration
+
+Exemple :
+
+DataSourceConfig
+
+✔ connexion DB

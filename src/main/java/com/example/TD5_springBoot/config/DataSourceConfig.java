@@ -12,9 +12,9 @@ public class DataSourceConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/mini_dish_db");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("password");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/dish-ingredient-db");
+        dataSource.setUsername("mini_dish_db_manager");
+        dataSource.setPassword("password123");
 
         return dataSource;
     }
