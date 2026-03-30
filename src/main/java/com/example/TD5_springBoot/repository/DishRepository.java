@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class DishRepository {
@@ -18,7 +20,7 @@ public class DishRepository {
         this.dataSource = dataSource;
     }
 
-    public Dish findDish() throws SQLException {
+    public List<String> findDish() throws SQLException {
 
         Connection conn = dataSource.getConnection();
 
@@ -28,8 +30,8 @@ public class DishRepository {
         ResultSet rs = p.executeQuery();
 
         if (rs.next()) {
-            Dish dish = new Dish();
-            dish.setName(rs.getString("name"));
+            List<String> dish = new ArrayList<>();
+            dish.add(rs.getString("name"));
 
             return dish;
         }

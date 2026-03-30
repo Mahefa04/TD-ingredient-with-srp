@@ -14,4 +14,8 @@ public class DishService {
     public DishService(DishRepository repo) {
         this.repo = repo;
     }
+
+    public List<String> getDish() throws SQLException {
+        return repo.findDish();
+    }
 }
