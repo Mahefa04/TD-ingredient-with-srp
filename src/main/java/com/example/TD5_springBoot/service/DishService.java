@@ -18,14 +18,15 @@ import java.util.List;
 public class DishService {
 
     private final DishRepository dishRepository;
-    private final IngredientRepository ingredientRepo;
+    private final IngredientRepository ingredientRepository;
 
-    public DishService(DishRepository dishRepository, IngredientRepository ingredientRepo) {
+    public DishService(DishRepository dishRepository,
+                       IngredientRepository ingredientRepository) {
         this.dishRepository = dishRepository;
-        this.ingredientRepo = ingredientRepo;
+        this.ingredientRepository = ingredientRepository;
     }
 
-    // 🔥 GET /dishes
+
     public List<DishDTO> getAll() throws SQLException {
 
         List<Dish> dishes = dishRepository.findAll();
@@ -39,33 +40,21 @@ public class DishService {
         return result;
     }
 
-    // 🔥 Mapping Entity → DTO
-    private DishDTO toDTO(Dish dish) {
 
-        DishDTO dto = new DishDTO();
-        dto.setId(dish.getId());
-        dto.setName(dish.getName());
-        dto.setPrice(dish.getPrice());
+    public DishDTO getById(int id) throws SQLException {
 
-        List<IngredientDTO> ingredientsDTO = new ArrayList<>();
+        Dish dish = dishRepository.findDishById(id);
 
-        if (dish.getIngredients() != null) {
-            for (Ingredient ing : dish.getIngredients()) {
-
-                IngredientDTO ingDTO = new IngredientDTO();
-                ingDTO.setId(ing.getId());
-                ingDTO.setName(ing.getName());
-                ingDTO.setPrice(ing.getPrice());
-                ingDTO.setCategory(ing.getCategory());
-
-                ingredientsDTO.add(ingDTO);
-            }
+        if (dish == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Dish.id=" + id + " is not found"
+            );
         }
 
-        dto.setIngredients(ingredientsDTO);
-
-        return dto;
+        return toDTO(dish);
     }
+
 
     public DishDTO updateDishIngredients(int dishId, List<IngredientDTO> ingredients)
             throws SQLException {
@@ -79,37 +68,49 @@ public class DishService {
             );
         }
 
-        public DishDTO updateDishIngredients(int dishId, List<IngredientDTO> ingredients)
-        throws SQLException {
 
-            Dish dish = dishRepository.findDishById(dishId);
+        dishRepository.removeIngredientsFromDish(dishId);
 
-            if (dish == null) {
-                throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Dish.id=" + dishId + " is not found"
-                );
+
+        for (IngredientDTO dto : ingredients) {
+
+            Ingredient ing = ingredientRepository.findById(dto.getId());
+
+            if (ing != null) { // ignorer inconnus
+                dishRepository.addIngredientToDish(dishId, ing.getId());
             }
-
-            // 🔥 supprimer anciens liens
-            dishRepository.removeIngredientsFromDish(dishId);
-
-            for (IngredientDTO dto : ingredients) {
-
-                Ingredient ing = ingredientRepo.findById(dto.getId());
-
-                if (ing != null) { // 🔥 ignorer inconnus
-                    dishRepository.addIngredientToDish(dishId, ing.getId());
-                }
-            }
-
-            Dish updated = dishRepository.findDishById(dishId);
-
-            return toDTO(updated);
         }
 
-        Dish updated = dishRepository.findDishById(dishId);
+        Dish updatedDish = dishRepository.findDishById(dishId);
 
-        return toDTO(updated);
+        return toDTO(updatedDish);
+    }
+
+
+    private DishDTO toDTO(Dish dish) {
+
+        DishDTO dto = new DishDTO();
+        dto.setId(dish.getId());
+        dto.setName(dish.getName());
+        dto.setPrice(dish.getPrice());
+
+        List<IngredientDTO> ingredientDTOs = new ArrayList<>();
+
+        if (dish.getIngredients() != null) {
+            for (Ingredient ing : dish.getIngredients()) {
+
+                IngredientDTO ingDTO = new IngredientDTO();
+                ingDTO.setId(ing.getId());
+                ingDTO.setName(ing.getName());
+                ingDTO.setPrice(ing.getPrice());
+                ingDTO.setCategory(ing.getCategory());
+
+                ingredientDTOs.add(ingDTO);
+            }
+        }
+
+        dto.setIngredients(ingredientDTOs);
+
+        return dto;
     }
 }

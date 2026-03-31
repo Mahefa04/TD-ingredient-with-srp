@@ -105,4 +105,34 @@ public class DishRepository {
 
         p.executeUpdate();
     }
+
+    public Dish findDishById(int id) throws SQLException {
+
+        Connection conn = dataSource.getConnection();
+
+        String sql = "SELECT id, name, selling_price FROM dish WHERE id = ?";
+        PreparedStatement p = conn.prepareStatement(sql);
+        p.setInt(1, id);
+
+        ResultSet rs = p.executeQuery();
+
+        if (rs.next()) {
+            Dish dish = new Dish();
+
+            dish.setId(rs.getInt("id"));
+            dish.setName(rs.getString("name"));
+
+            Double price = rs.getObject("selling_price") != null
+                    ? rs.getBigDecimal("selling_price").doubleValue()
+                    : null;
+
+            dish.setPrice(price);
+
+            dish.setIngredients(new ArrayList<>()); // important
+
+            return dish;
+        }
+
+        return null;
+    }
 }
