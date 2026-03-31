@@ -1,25 +1,19 @@
 package com.example.TD5_springBoot.entity;
 
-import com.example.TD5_springBoot.entity.enums.DishTypeEnum;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Dish {
 
-    private Integer id;
+    private int id;
     private String name;
-    private DishTypeEnum dishType;
     private Double price;
+    private List<Ingredient> ingredients;
 
-    private List<DishIngredient> dishIngredients = new ArrayList<>();
-
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -31,14 +25,6 @@ public class Dish {
         this.name = name;
     }
 
-    public DishTypeEnum getDishType() {
-        return dishType;
-    }
-
-    public void setDishType(DishTypeEnum dishType) {
-        this.dishType = dishType;
-    }
-
     public Double getPrice() {
         return price;
     }
@@ -47,22 +33,11 @@ public class Dish {
         this.price = price;
     }
 
-    public List<DishIngredient> getDishIngredients() {
-        return dishIngredients;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setDishIngredients(List<DishIngredient> dishIngredients) {
-        this.dishIngredients = dishIngredients;
-    }
-
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", dishType=" + dishType +
-                ", price=" + price +
-                ", dishIngredients=" + dishIngredients +
-                '}';
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }
