@@ -39,4 +39,14 @@ public class DishController {
 
         return service.updateDishIngredients(id, ingredients);
     }
+
+    @GetMapping("/dishes/{id}/ingredients")
+    public List<IngredientDTO> getDishIngredients(
+            @PathVariable int id,
+            @RequestParam(required = false) String ingredientName,
+            @RequestParam(required = false) Double ingredientPriceAround
+    ) throws SQLException {
+
+        return service.getDishIngredients(id, ingredientName, ingredientPriceAround);
+    }
 }

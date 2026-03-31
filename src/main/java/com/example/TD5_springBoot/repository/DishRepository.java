@@ -134,5 +134,64 @@ public class DishRepository {
         }
 
         return null;
+    }public List<Ingredient> findIngredientsByDishWithFilter(
+            int dishId,
+            String name,
+            Double price
+    ) throws SQLException {
+
+        Connection conn = dataSource.getConnection();
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT id, name, price, category
+        FROM ingredient
+        WHERE id_dish = ?
+    """);
+
+        // 🔥 filtre nom
+        if (name != null) {
+            sql.append(" AND LOWER(name) LIKE LOWER(?)");
+        }
+
+        // 🔥 filtre prix ±50
+        if (price != null) {
+            sql.append(" AND price BETWEEN ? AND ?");
+        }
+
+        PreparedStatement p = conn.prepareStatement(sql.toString());
+
+        int index = 1;
+        p.setInt(index++, dishId);
+
+        if (name != null) {
+            p.setString(index++, "%" + name + "%");
+        }
+
+        if (price != null) {
+            p.setDouble(index++, price - 50);
+            p.setDouble(index++, price + 50);
+        }
+
+        ResultSet rs = p.executeQuery();
+
+        List<Ingredient> list = new ArrayList<>();
+
+        while (rs.next()) {
+
+            Ingredient ing = new Ingredient();
+
+            ing.setId(rs.getInt("id"));
+            ing.setName(rs.getString("name"));
+            ing.setPrice(rs.getDouble("price"));
+            ing.setCategory(
+                    CategoryEnum.valueOf(rs.getString("category"))
+            );
+
+            list.add(ing);
+        }
+
+        return list;
     }
+
+
 }

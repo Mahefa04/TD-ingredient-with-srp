@@ -113,4 +113,39 @@ public class DishService {
 
         return dto;
     }
+
+    public List<IngredientDTO> getDishIngredients(
+            int dishId,
+            String name,
+            Double price
+    ) throws SQLException {
+
+        // 🔥 vérifier dish existe
+        Dish dish = dishRepository.findDishById(dishId);
+
+        if (dish == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Dish.id=" + dishId + " is not found"
+            );
+        }
+
+        List<Ingredient> ingredients =
+                dishRepository.findIngredientsByDishWithFilter(dishId, name, price);
+
+        List<IngredientDTO> result = new ArrayList<>();
+
+        for (Ingredient ing : ingredients) {
+
+            IngredientDTO dto = new IngredientDTO();
+            dto.setId(ing.getId());
+            dto.setName(ing.getName());
+            dto.setPrice(ing.getPrice());
+            dto.setCategory(ing.getCategory());
+
+            result.add(dto);
+        }
+
+        return result;
+    }
 }
