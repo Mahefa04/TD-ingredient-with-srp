@@ -3,7 +3,9 @@ package com.example.TD5_springBoot.service;
 import com.example.TD5_springBoot.dto.IngredientDTO;
 import com.example.TD5_springBoot.entity.Ingredient;
 import com.example.TD5_springBoot.repository.IngredientRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,7 +44,10 @@ public class IngredientService {
         Ingredient ingredient = repo.findById(id);
 
         if (ingredient == null) {
-            throw new RuntimeException("Ingredient.id= "+id+" is not found");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Ingredient.id=" + id + " is not found"
+            );
         }
 
         IngredientDTO dto = new IngredientDTO();

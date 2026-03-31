@@ -1,6 +1,7 @@
 package com.example.TD5_springBoot.repository;
 
 import com.example.TD5_springBoot.entity.Dish;
+import com.example.TD5_springBoot.entity.Ingredient;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -20,20 +21,21 @@ public class DishRepository {
         this.dataSource = dataSource;
     }
 
-    public List<String> findDish() throws SQLException {
+    public List<Dish> findAll() throws SQLException {
 
         Connection conn = dataSource.getConnection();
 
-        String sql = "SELECT name from dish";
+        String sql = "SELECT id, name, selling_price,  from dish";
         PreparedStatement p = conn.prepareStatement(sql);
 
         ResultSet rs = p.executeQuery();
 
-        if (rs.next()) {
-            List<String> dish = new ArrayList<>();
-            dish.add(rs.getString("name"));
+        while (rs.next()) {
+            Dish dish = new Dish();
 
-            return dish;
+            dish.setName(rs.getString("name"));
+
+
         }
         return null;
     }

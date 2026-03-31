@@ -12,7 +12,6 @@ public class Dish {
     private DishTypeEnum dishType;
     private Double price;
 
-
     private List<DishIngredient> dishIngredients = new ArrayList<>();
 
 
