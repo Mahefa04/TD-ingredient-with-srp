@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Mini Dish API
+  version: 1.0.0
+  description: API REST pour la gestion des ingrédients, plats et stock.
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /ingredients:
+    get:
+      summary: Récupérer la liste des ingrédients
+      description: Retourne tous les ingrédients enregistrés en base.
+      tags:
+        - Ingredients
+      responses:
+        '200':
+          description: Liste des ingrédients retournée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ingredient'
