@@ -105,5 +105,19 @@ paths:
                   type: string
                   example: Ingredient.id=1 is not found
 
-
+  /dishes:
+    get:
+      summary: Récupérer la liste des plats
+      description: Retourne tous les plats avec leurs ingrédients.
+      tags:
+        - Dishes
+      responses:
+        '200':
+          description: Liste des plats retournée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
 
