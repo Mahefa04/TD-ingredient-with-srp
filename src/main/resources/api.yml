@@ -23,3 +23,34 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ingredient'
+
+    /ingredients/{id}:
+      get:
+        summary: Récupérer un ingrédient par son identifiant
+        description: Retourne l’ingrédient correspondant à l’identifiant fourni.
+        tags:
+          - Ingredients
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: Identifiant de l’ingrédient
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '200':
+            description: Ingrédient trouvé
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Ingredient'
+          '404':
+            description: Ingrédient non trouvé
+            content:
+              text/plain:
+                schema:
+                  type: string
+                  example: Ingredient.id=1 is not found
+
+
