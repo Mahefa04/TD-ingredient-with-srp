@@ -121,3 +121,165 @@ paths:
                 items:
                   $ref: '#/components/schemas/Dish'
 
+  /dishes/{id}/ingredients:
+    put:
+      summary: Modifier les ingrédients d’un plat
+      description: |
+        Associe ou détache une liste d’ingrédients à un plat.
+        - Si un ingrédient du body n’existe pas en base, il est ignoré.
+        - Si le plat n’existe pas, on retourne 404.
+        - Le body est obligatoire.
+      tags:
+        - Dishes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identifiant du plat
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        description: Liste des ingrédients à associer au plat
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/IngredientRequest'
+      responses:
+        '200':
+          description: Ingrédients du plat mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+        '400':
+          description: Corps de requête manquant ou invalide
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Request body is required
+        '404':
+          description: Plat non trouvé
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Dish.id=1 is not found
+
+  components:
+    schemas:
+      Ingredient:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          name:
+            type: string
+            example: Tomate
+          unit:
+            type: string
+            example: KG
+          price:
+            type: number
+            format: double
+            example: 2500.0
+        required:
+          - id
+          - name
+          - unit
+          - price
+
+      IngredientRequest:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+        required:
+          - id
+
+      IngredientInDish:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          name:
+            type: string
+            example: Tomate
+          unit:
+            type: string
+            example: KG
+          price:
+            type: number
+            format: double
+            example: 2500.0
+        required:
+          - id
+          - name
+          - unit
+          - price
+
+      Dish:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          name:
+            type: string
+            example: Salade fraîche
+          available:
+            type: boolean
+            example: true
+          price:
+            type: number
+            format: double
+            example: 15000.0
+          ingredients:
+            type: array
+            items:
+              $ref: '#/components/schemas/IngredientInDish'
+        required:
+          - id
+          - name
+          - available
+          - price
+          - ingredients
+
+      IngredientStock:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          name:
+            type: string
+            example: Tomate
+          unit:
+            type: string
+            example: KG
+          stock:
+            type: number
+            format: double
+            example: 12.5
+          at:
+            type: string
+            format: date-time
+            example: 2025-09-01T10:00:00
+        required:
+          - id
+          - name
+          - unit
+          - stock
+          - at
